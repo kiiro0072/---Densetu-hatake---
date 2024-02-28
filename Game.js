@@ -1,5 +1,6 @@
 //Posクラス
-
+const music = new Audio('./Saund/手で穴を掘る2.mp3');
+const BGM = new Audio('./Saund/maou_game_village01.mp3');
 class Pos{
   x = 0;
   y = 0;
@@ -28,7 +29,7 @@ var IM = 0;
 var IY = 0;
 var IMA = 0;
 var IMAY = 0;
-var screnn = 0;
+var screnn = null;
 var Item = 1;
 var Mx = 0;
 var My = 0;
@@ -362,12 +363,14 @@ canvas.addEventListener("mousedown", e => {
   // マウスの座標をCanvas内の座標とあわせるため
   click = true;
   if(Item_Type[Item-1] == "a"){
+    music.play()
   Blcok_List[IMAY][IMA] = 1
   for (let i = 0; i < 8; i++) {
     removeItem("a")
   }
   }
   if(Item_Type[Item-1] == "b"){
+    music.play()
     if( Blcok_List[IMAY][IMA] == 1){
     Blcok_List[IMAY][IMA] = 2
     for (let i = 0; i < 1; i++) {
@@ -379,6 +382,12 @@ canvas.addEventListener("mousedown", e => {
 }else{
 }})
 function keypress_ivent(e) {
+  if(screnn == null){
+    BGM.play();
+    BGM.loop = true
+    BGM.volume = 0.5;
+    screnn = 0
+  }
   if(screnn == 0){
 	switch (e.key) {
     case "d":
@@ -556,6 +565,7 @@ IMAY =+ Math.round((IY+Camera.y+300)/65);
       }
   }
 }else{
+  if(screnn == 1){
   ctx.fillStyle = "white"
   ctx.fillRect(0,0,10000,1000)
   var Imege = new Image();
@@ -598,8 +608,22 @@ IMAY =+ Math.round((IY+Camera.y+300)/65);
 ctx.fillRect(0,600,10000,1000)
 ctx.fillStyle = "white"
 }
+}
+if(!(screnn == null)){
 ctx.font = "bold 64px Osaka-Mono";
 ctx.fillText(Gold+"G",50,650)
+ctx.font = "bold 20px Osaka-Mono";
+if(screnn == 0){
+ctx.fillText("wasd:移動　q:収穫　クリック:植える・耕す　1~9アイテム選択　e:選択したアイテムを売る　m:店に行く",0,30)
+}else{
+  ctx.fillStyle = "black"
+  ctx.fillText("ws:選択　q:購入　m:店から帰る",0,30)
+}
+}
+if(screnn == null){
+  ctx.font = "bold 64px Osaka-Mono";
+  ctx.fillText("何かキーを押してスタート",0,90)
+}
 Blok = false;
 	requestAnimationFrame(main);
 }
